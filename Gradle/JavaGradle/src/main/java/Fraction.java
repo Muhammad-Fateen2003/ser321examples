@@ -42,10 +42,20 @@ public class Fraction {
          // create a new instance
          // Fraction *frac = [[Fraction alloc] init];
          Fraction frac = new Fraction();
+        int numerator, denominator;
+        if (args.length == 2) {
+            numerator = Integer.parseInt(args[0]);
+            denominator = Integer.parseInt(args[1]);
+        } else if (args.length == 1) {
+            numerator = Integer.parseInt(args[0]);
+            denominator = 1;
+        } else {
+            numerator = 1;
+            denominator = 1;
+        }
 
-         // set the values
-         frac.setNumerator(args[0]);
-         frac.setDenominator(args[1]);
+        frac.setNumerator(numerator);
+        frac.setDenominator(denominator);
 
          // print it
          System.out.print("The fraction is: ");
