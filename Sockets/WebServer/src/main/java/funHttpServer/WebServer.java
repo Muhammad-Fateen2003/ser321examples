@@ -367,9 +367,8 @@ class WebServer {
               builder.append("\n");
               builder.append("Invalid Parameters");
           }
-
       
-      } else if (request.contains("madlibs?")) {
+        } else if (request.contains("madlibs?")) {
         Map<String, String> query_pairs = new LinkedHashMap<String, String>();
         query_pairs = splitQuery(request.replace("madlibs?", ""));
         String word1 = null;
