@@ -17,6 +17,7 @@ write a response back
 package funHttpServer;
 
 import java.io.*;
+import org.json.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -262,6 +263,63 @@ class WebServer {
           builder.append("Check the todos mentioned in the Java source file");
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for
+
+          // saving it as JSON array (if it sere not an array it woudl need to be a JSONObject)
+          JSONArray repoArray = new JSONArray(json);
+
+          // new JSON which we want to save later on
+          JSONArray newjSON = new JSONArray();
+
+          // go through all the entries in the JSON array (so all the repos of the user)
+          for(int i=0; i<repoArray.length(); i++){
+
+            // now we have a JSON object, one repo
+            JSONObject repo = repoArray.getJSONObject(i);
+
+            // get repo name
+            String repoName = repo.getString("name");
+            System.out.println(repoName);
+
+            // owner is a JSON object in the repo object, get it and save it in own variable then read the login name
+            JSONObject owner = repo.getJSONObject("owner");
+            String ownername = owner.getString("login");
+            System.out.println(ownername);
+
+            // create a new object for the repo we want to store add the repo name and owername to it
+            JSONObject newRepo = new JSONObject();
+            newRepo.put("name",repoName);
+            newRepo.put("owner",ownername);
+
+
+            // fetch all the branches from the repo and save and branches JSONArray
+            String jsonBranches = fetchURL("https://api.github.com/repos/" + user + "/" + repoName + "/branches");
+            JSONArray branches = new JSONArray(jsonBranches);
+
+            // create a new branch JSON object
+            JSONArray newBranchJSON = new JSONArray();
+
+            // iterate through all branches and save the branch name
+            for(int j=0; j<branches.length(); j++){
+              JSONObject branch = branches.getJSONObject(j);
+              String branchName = branch.getString("name");
+              System.out.println("   "+ branchName);
+              JSONObject newBranch = new JSONObject();
+              newBranch.put("name", branchName);
+
+              // add new branch to branch array
+              newBranchJSON.put(newBranch);
+            }
+
+            // add the branches array to the repo
+            newRepo.put("branches", newBranchJSON);
+            newjSON.put(newRepo);
+          }
+
+          // save shortened info into file
+          PrintWriter out = new PrintWriter("repoShort.json");
+          out.println(newjSON.toString());
+          out.close();
+
 
         } else {
           // if the request is not recognized at all
