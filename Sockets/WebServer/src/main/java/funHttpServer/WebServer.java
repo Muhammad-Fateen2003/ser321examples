@@ -328,38 +328,34 @@ class WebServer {
       
           try {
               player1 = query_pairs.get("player1");
+              if(!(player1.equals("rock") || player1.equals("paper") || player1.equals("scissors"))){
+                  throw new IllegalArgumentException();
+              }
           } catch (Exception e) {
               System.out.println("Error: Invalid input for player1. Please enter either rock, paper or scissors.");
           }
       
           try {
-            player2 = query_pairs.get("player2");
+              player2 = query_pairs.get("player2");
+              if(!(player2.equals("rock") || player2.equals("paper") || player2.equals("scissors"))){
+                  throw new IllegalArgumentException();
+              }
           } catch (Exception e) {
               System.out.println("Error: Invalid input for player2. Please enter either rock, paper or scissors.");
           }
       
           if (player1 != null && player2 != null) {
-              if(((player1 != "rock") || (player1 != "paper") || (player1 != "scissors")) || ((player2 != "rock") || (player2 != "paper") || (player2 != "scissors"))){
-                rpc = "Please choose either rock, paper, or scissors";
-              }else if(player1 == player2) {
-                rpc = "The Game is a Tie";
-              }else if(player1 == "rock" && player2 == "scissors") {
-                rpc = "Player 1 is the winner";
-              }else if(player1 == "scissors" && player2 == "papper") {
-                rpc = "Player 1 is the winner";
-              }else if(player1 == "papper" && player2 == "rock") {
-                rpc = "Player 1 is the winner";
-              }else if(player2 == "rock" && player1 == "scissors") {
-                rpc = "Player 2 is the winner";
-              }else if(player2 == "scissors" && player1 == "papper") {
-                rpc = "Player 2 is the winner";
-              }else if(player2 == "papper" && player1 == "rock") {
-                rpc = "Player 2 is the winner";
+              if(player1.equals(player2)) {
+                  rpc = "The Game is a Tie";
+              }else if(player1.equals("rock") && player2.equals("scissors")) {
+                  rpc = "Player 1 is the winner";
+              }else if(player1.equals("scissors") && player2.equals("paper")) {
+                  rpc = "Player 1 is the winner";
+              }else if(player1.equals("paper") && player2.equals("rock")) {
+                  rpc = "Player 1 is the winner";
+              }else {
+                  rpc = "Player 2 is the winner";
               }
-                // String[] choices = {"rock", "paper", "scissors"};
-                // Random rand = new Random();
-                // int randomIndex = rand.nextInt(sentences.length);
-                // String madlib = sentences[randomIndex];
               builder.append("HTTP/1.1 200 OK\n");
               builder.append("Content-Type: text/html; charset=utf-8\n");
               builder.append("\n");
@@ -371,6 +367,8 @@ class WebServer {
               builder.append("\n");
               builder.append("Invalid Parameters");
           }
+      }
+      
       } else if (request.contains("madlibs?")) {
         Map<String, String> query_pairs = new LinkedHashMap<String, String>();
         query_pairs = splitQuery(request.replace("madlibs?", ""));
