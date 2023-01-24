@@ -280,6 +280,8 @@ class WebServer {
             String repoName = repo.getString("name");
             System.out.println(repoName);
 
+            String repoId = repo.getString("id");
+
             // owner is a JSON object in the repo object, get it and save it in own variable then read the login name
             JSONObject owner = repo.getJSONObject("owner");
             String ownername = owner.getString("login");
@@ -287,8 +289,9 @@ class WebServer {
 
             // create a new object for the repo we want to store add the repo name and owername to it
             JSONObject newRepo = new JSONObject();
-            newRepo.put("name",repoName);
-            newRepo.put("owner",ownername);
+            newRepo.put("fullname",repoName);
+            newRepo.put("id",repoId);
+            newRepo.put("loginname",ownername);
             newjSON.put(newRepo);
          }
 
