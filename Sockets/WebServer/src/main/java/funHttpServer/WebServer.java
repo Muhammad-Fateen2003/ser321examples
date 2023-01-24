@@ -367,7 +367,7 @@ class WebServer {
               builder.append("\n");
               builder.append("Invalid Parameters");
           }
-      }
+
       
       } else if (request.contains("madlibs?")) {
         Map<String, String> query_pairs = new LinkedHashMap<String, String>();
