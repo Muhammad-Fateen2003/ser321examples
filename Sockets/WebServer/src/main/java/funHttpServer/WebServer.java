@@ -250,54 +250,112 @@ class WebServer {
           //     then drill down to what you care about
           // "Owner's repo is named RepoName. Example: find RepoName's contributors" translates to
           //     "/repos/OWNERNAME/REPONAME/contributors"
+          String json = null;
 
+          try {
+            Map<String, String> query_pairs = new LinkedHashMap<String, String>();
+            query_pairs = splitQuery(request.replace("github?", ""));
+            json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
+            // System.out.println(json);
+          } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error: Invalid Input Parameter.");
+            // Generate response
+            builder.append("HTTP/1.1 400 Bad Request\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("Invalid Input Parameter");
+          }
+          
+          if(json != null){
+            try {
+              
+
+              // TODO: Parse the JSON returned by your fetch and create an appropriate
+              // response based on what the assignment document asks for
+              // saving it as JSON array (if it sere not an array it woudl need to be a JSONObject)
+            JSONArray repoArray = new JSONArray(json);
+
+            // new JSON which we want to save later on
+            JSONArray newjSON = new JSONArray();
+
+            // go through all the entries in the JSON array (so all the repos of the user)
+            for(int i=0; i<repoArray.length(); i++){
+
+                // now we have a JSON object, one repo 
+                JSONObject repo = repoArray.getJSONObject(i);
+
+                // get repo name
+                String repoName = repo.getString("name");
+                System.out.println(repoName);
+
+                Integer repoId = repo.getInt("id");
+
+                // owner is a JSON object in the repo object, get it and save it in own variable then read the login name
+                JSONObject owner = repo.getJSONObject("owner");
+                String ownername = owner.getString("login");
+                System.out.println(ownername);
+
+                // create a new object for the repo we want to store add the repo name and owername to it
+                JSONObject newRepo = new JSONObject();
+                newRepo.put("fullname",repoName);
+                newRepo.put("id",repoId);
+                newRepo.put("loginname",ownername);
+                newjSON.put(newRepo);
+            }
+            
+            builder.append("HTTP/1.1 200 OK\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append(newjSON.toString());
+          } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error: Failed to parse Github results.");
+            // Generate response
+            builder.append("HTTP/1.1 400 Bad Request\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("Failed to parse Github results");
+          }
+        }
+
+        } else if (request.contains("madlibs?")) {
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
-          query_pairs = splitQuery(request.replace("github?", ""));
-          String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
-          System.out.println(json);
-
-          builder.append("HTTP/1.1 200 OK\n");
-          builder.append("Content-Type: text/html; charset=utf-8\n");
-          builder.append("\n");
-          // TODO: Parse the JSON returned by your fetch and create an appropriate
-          // response based on what the assignment document asks for
-          String json3 = "{'Organization':'ASU','Adress':{'first':'Poly','second':'Tempe'},'employees':[{ 'firstName':'John', 'lastName':'Doe' },{ 'firstName':'Anna', 'lastName':'Smith' },{ 'firstName':'Peter', 'lastName':'Jones' }]}";
-          // Json string to JSONObject
-          JSONObject newObject = new JSONObject(json3);
-           // saving it as JSON array (if it sere not an array it woudl need to be a JSONObject)
-         JSONArray repoArray = new JSONArray(json);
-
-         // new JSON which we want to save later on
-         JSONArray newjSON = new JSONArray();
-
-         // go through all the entries in the JSON array (so all the repos of the user)
-         for(int i=0; i<repoArray.length(); i++){
-
-            // now we have a JSON object, one repo 
-            JSONObject repo = repoArray.getJSONObject(i);
-
-            // get repo name
-            String repoName = repo.getString("name");
-            System.out.println(repoName);
-
-            Integer repoId = repo.getInt("id");
-
-            // owner is a JSON object in the repo object, get it and save it in own variable then read the login name
-            JSONObject owner = repo.getJSONObject("owner");
-            String ownername = owner.getString("login");
-            System.out.println(ownername);
-
-            // create a new object for the repo we want to store add the repo name and owername to it
-            JSONObject newRepo = new JSONObject();
-            newRepo.put("fullname",repoName);
-            newRepo.put("id",repoId);
-            newRepo.put("loginname",ownername);
-            newjSON.put(newRepo);
-         }
-
-         builder.append(newjSON.toString());
-
-        } else {
+          query_pairs = splitQuery(request.replace("madlibs?", ""));
+          String word1 = null;
+          String word2 = null;
+      
+          try {
+              word1 = query_pairs.get("word1");
+          } catch (Exception e) {
+              System.out.println("Error: Invalid input for word1. Please enter a valid word.");
+          }
+      
+          try {
+              word2 = query_pairs.get("word2");
+          } catch (Exception e) {
+              System.out.println("Error: Invalid input for word2. Please enter a valid word.");
+          }
+      
+          if (word1 != null && word2 != null) {
+              String[] sentences = {"The " + word1 + " jumped over the " + word2 + ".", 
+                                    "The " + word2 + " and the " + word1 + " ran through the forest.", 
+                                    "The " + word1 + " and the " + word2 + " went to the park."};
+              Random rand = new Random();
+              int randomIndex = rand.nextInt(sentences.length);
+              String madlib = sentences[randomIndex];
+              builder.append("HTTP/1.1 200 OK\n");
+              builder.append("Content-Type: text/html; charset=utf-8\n");
+              builder.append("\n");
+              builder.append(madlib);
+          } else {
+              System.out.println("Error: One or both of the input words is not valid.");
+              builder.append("HTTP/1.1 400 Bad Request\n");
+              builder.append("Content-Type: text/html; charset=utf-8\n");
+              builder.append("\n");
+              builder.append("Invalid Parameters");
+          }
+      } else {
           // if the request is not recognized at all
 
           builder.append("HTTP/1.1 400 Bad Request\n");
