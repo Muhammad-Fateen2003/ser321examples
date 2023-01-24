@@ -329,6 +329,7 @@ class WebServer {
           try {
               player1 = query_pairs.get("player1");
               if(!(player1.equals("rock") || player1.equals("paper") || player1.equals("scissors"))){
+                  player1 = null;
                   throw new IllegalArgumentException();
               }
           } catch (Exception e) {
@@ -338,6 +339,7 @@ class WebServer {
           try {
               player2 = query_pairs.get("player2");
               if(!(player2.equals("rock") || player2.equals("paper") || player2.equals("scissors"))){
+                  player2 = null;
                   throw new IllegalArgumentException();
               }
           } catch (Exception e) {
