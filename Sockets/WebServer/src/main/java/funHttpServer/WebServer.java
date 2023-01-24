@@ -319,7 +319,7 @@ class WebServer {
           }
         }
 
-        } else if (request.contains("rrps?")) {
+        } else if (request.contains("rps?")) {
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("rps?", ""));
           String player1 = null;
