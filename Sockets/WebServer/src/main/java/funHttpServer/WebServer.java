@@ -201,12 +201,31 @@ class WebServer {
           // extract path parameters
           query_pairs = splitQuery(request.replace("multiply?", ""));
 
-          // extract required fields from parameters
-          Integer num1 = Integer.parseInt(query_pairs.get("num1"));
-          Integer num2 = Integer.parseInt(query_pairs.get("num2"));
+          Integer num1 = null;
+          Integer num2 = null;
 
-          // do math
-          Integer result = num1 * num2;
+          // extract required fields from parameters
+          try {
+            Integer num1 = Integer.parseInt(query_pairs.get("num1"));
+            // rest of the code
+          } catch (NumberFormatException e) {
+            System.out.println("Error: Invalid input '" + query_pairs.get("num1") + "' for num1. Please enter a valid number.");
+          }
+
+          try {
+            Integer num2 = Integer.parseInt(query_pairs.get("num2"));
+            // rest of the code
+          } catch (NumberFormatException e) {
+            System.out.println("Error: Invalid input '" + query_pairs.get("num2") + "' for num2. Please enter a valid number.");
+          }
+
+          if (num1 != null && num2 != null) {
+            // do math
+            Integer result = num1 * num2;
+            // write the result to the output stream
+          } else {
+            System.out.println("Error: One or both of the input numbers is not valid.");
+          }
 
           // Generate response
           builder.append("HTTP/1.1 200 OK\n");
