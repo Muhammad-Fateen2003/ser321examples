@@ -259,7 +259,6 @@ class WebServer {
           builder.append("HTTP/1.1 200 OK\n");
           builder.append("Content-Type: text/html; charset=utf-8\n");
           builder.append("\n");
-          builder.append("Check the todos mentioned in the Java source file");
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for
           String json3 = "{'Organization':'ASU','Adress':{'first':'Poly','second':'Tempe'},'employees':[{ 'firstName':'John', 'lastName':'Doe' },{ 'firstName':'Anna', 'lastName':'Smith' },{ 'firstName':'Peter', 'lastName':'Jones' }]}";
@@ -293,11 +292,7 @@ class WebServer {
             newjSON.put(newRepo);
          }
 
-         // save shortened info into file
-         PrintWriter out = new PrintWriter("repoShort.json");
-         out.println(newjSON.toString());
-         out.close();
-
+         builder.append(newjSON.toString());
 
         } else {
           // if the request is not recognized at all
