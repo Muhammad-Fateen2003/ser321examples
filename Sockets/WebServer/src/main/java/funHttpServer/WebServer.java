@@ -340,21 +340,21 @@ class WebServer {
           if (player1 != null && player2 != null) {
             String rpc = null;
             if(((player1 != "rock") || (player1 != "paper") || (player1 != "scissors")) || ((player2 != "rock") || (player2 != "paper") || (player2 != "scissors"))){
-              rpc = "Please choose either rock, paper, or scissors"
+              rpc = "Please choose either rock, paper, or scissors";
             }else if(player1 == player2) {
               rpc = "The Game is a Tie";
             }else if(player1 == "rock" && player2 == "scissors") {
-              rpc = "Player 1 is the winner"
+              rpc = "Player 1 is the winner";
             }else if(player1 == "scissors" && player2 == "papper") {
-              rpc = "Player 1 is the winner"
+              rpc = "Player 1 is the winner";
             }else if(player1 == "papper" && player2 == "rock") {
-              rpc = "Player 1 is the winner"
+              rpc = "Player 1 is the winner";
             }else if(player2 == "rock" && player1 == "scissors") {
-              rpc = "Player 2 is the winner"
+              rpc = "Player 2 is the winner";
             }else if(player2 == "scissors" && player1 == "papper") {
-              rpc = "Player 2 is the winner"
+              rpc = "Player 2 is the winner";
             }else if(player2 == "papper" && player1 == "rock") {
-              rpc = "Player 2 is the winner"
+              rpc = "Player 2 is the winner";
             }
               String[] choices = {"rock", "paper", "scissors"};
               // Random rand = new Random();
