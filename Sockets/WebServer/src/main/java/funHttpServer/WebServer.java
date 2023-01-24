@@ -203,17 +203,18 @@ class WebServer {
 
           Integer num1 = null;
           Integer num2 = null;
+          Integer result = null;
 
           // extract required fields from parameters
           try {
-            Integer num1 = Integer.parseInt(query_pairs.get("num1"));
+            num1 = Integer.parseInt(query_pairs.get("num1"));
             // rest of the code
           } catch (NumberFormatException e) {
             System.out.println("Error: Invalid input '" + query_pairs.get("num1") + "' for num1. Please enter a valid number.");
           }
 
           try {
-            Integer num2 = Integer.parseInt(query_pairs.get("num2"));
+            num2 = Integer.parseInt(query_pairs.get("num2"));
             // rest of the code
           } catch (NumberFormatException e) {
             System.out.println("Error: Invalid input '" + query_pairs.get("num2") + "' for num2. Please enter a valid number.");
@@ -221,17 +222,22 @@ class WebServer {
 
           if (num1 != null && num2 != null) {
             // do math
-            Integer result = num1 * num2;
+            result = num1 * num2;
             // write the result to the output stream
+            // Generate response
+            builder.append("HTTP/1.1 200 OK\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("Result is: " + result);
           } else {
             System.out.println("Error: One or both of the input numbers is not valid.");
+            // Generate response
+            builder.append("HTTP/1.1 400 Bad Request\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("Invalid Parameters");
           }
 
-          // Generate response
-          builder.append("HTTP/1.1 200 OK\n");
-          builder.append("Content-Type: text/html; charset=utf-8\n");
-          builder.append("\n");
-          builder.append("Result is: " + result);
 
           // TODO: Include error handling here with a correct error code and
           // a response that makes sense
