@@ -28,7 +28,9 @@ import java.util.LinkedHashMap;
 import java.nio.charset.Charset;
 
 class WebServer {
-
+  public static void main(String args[]) {
+    WebServer server = new WebServer(9000);
+  }
   /**
    * Main thread
    * @param port to listen on
